@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 const MovieCard = ({
-  movie: { title, vote_average, poster_path, release_date, original_language },
+  movie: {
+    title,
+    vote_average,
+    poster_path,
+    release_date,
+    original_language,
+    overview,
+  },
 }) => {
+  let [showDescription, setShowDescription] = useState(false);
   return (
     <>
-      <div className="movie-card hover:scale-105 duration-300 cursor-pointer hover:shadow-white ">
+      <div
+        className="movie-card hover:scale-105 relative duration-300 cursor-pointer hover:shadow-white "
+        onClick={() => setShowDescription(!showDescription)}
+      >
         <img
           src={
             poster_path
@@ -13,10 +24,26 @@ const MovieCard = ({
               : "no-movie.png"
           }
           alt="movie title"
+          className={`duration-200 ease ${
+            showDescription ? "opacity-10" : "opacity-100"
+          }`}
         />
+
+        {showDescription && (
+          <div
+            className={`desc absolute pr-3 md:pr-1  top-10 flex justify-center items-center flex-col gap-2`}
+          >
+            <h3 className="bg-linear-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text drop-shadow-[0_0_10px_rgba(255,0,255,0.7)] ">
+              {title}
+            </h3>
+
+            <p className="text-white ">{overview}</p>
+          </div>
+        )}
         <div className="mt-4">
           <h3>{title}</h3>
         </div>
+
         <div className="content">
           <div className="rating">
             <img src="star.svg" alt="star" />

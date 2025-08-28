@@ -46,7 +46,7 @@ function App() {
         setMovieList([]);
         return;
       }
-      console.log(data);
+      console.log(data.results[0]);
       setMovieList(data.results);
       if (query && data.results.length > 0) {
         await updateSearchCount(query, data.results[0]);
@@ -77,7 +77,7 @@ function App() {
   useEffect(() => {
     fetchTrendingMovies();
   }, []);
-  console.log(page);
+ 
   return (
     <>
       <main>
