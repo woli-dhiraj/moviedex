@@ -23,7 +23,7 @@ function App() {
   let [debounceSearchTerm, setDebounceSearchTerm] = useState("");
   let [trendingMovies, setTrendingMovies] = useState([]);
   let [page, setPage] = useState(1);
-
+  let [totalPage, setTotalPage] = useState(null);
   const popularRef = useRef(null);
   useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm]);
 
@@ -46,7 +46,7 @@ function App() {
         setMovieList([]);
         return;
       }
-      console.log(data.results[0]);
+      setTotalPage(data.total_pages);
       setMovieList(data.results);
       if (query && data.results.length > 0) {
         await updateSearchCount(query, data.results[0]);
@@ -77,7 +77,7 @@ function App() {
   useEffect(() => {
     fetchTrendingMovies();
   }, []);
- 
+
   return (
     <>
       <main>
@@ -108,10 +108,17 @@ function App() {
             </section>
           )}
           <section className="all-movies mt-6 " ref={popularRef}>
-            <div className="popular">
+            <div className="popular relative">
               <h2 className="mt-4 mb-6" id="popular">
-               <button onClick={()=>setPage(1)} className="cursor-pointer"> Popular</button>
+                <button onClick={() => setPage(1)} className="cursor-pointer">
+                  {" "}
+                  Popular
+                </button>
               </h2>
+              <p className="absolute top-2 md:right-10 right-4 px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md text-white font-medium shadow-lg text-sm">
+                {`Page : ${page} / ${totalPage}`}
+              </p>
+
               {isLoading ? (
                 <Spinner />
               ) : errorMessage ? (

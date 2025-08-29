@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import {motion,AnimatePresence, easeInOut} from "framer-motion"
 const MovieCard = ({
   movie: {
     title,
@@ -14,7 +14,7 @@ const MovieCard = ({
   return (
     <>
       <div
-        className="movie-card hover:scale-105 relative duration-300 cursor-pointer hover:shadow-white "
+        className="movie-card  hover:scale-105 relative duration-300 cursor-pointer hover:shadow-white "
         onClick={() => setShowDescription(!showDescription)}
       >
         <img
@@ -29,17 +29,36 @@ const MovieCard = ({
           }`}
         />
 
-        {showDescription && (
-          <div
-            className={`desc absolute pr-3 md:pr-1  top-10 flex justify-center items-center flex-col gap-2`}
+        <AnimatePresence>
+
+          {showDescription && (
+          <motion.div
+          initial={{
+            y:-40,
+            opacity:0
+          }}
+          animate={{
+            y:10,
+            opacity:1
+          }}
+          exit={{
+            y:-40,
+            opacity:0
+          }}
+          transition={{
+            duration:0.4,
+            ease:easeInOut
+          }}
+            className={`desc absolute pr-3 md:pr-1 top-10  flex justify-center items-center flex-col gap-2`}
           >
             <h3 className="bg-linear-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text drop-shadow-[0_0_10px_rgba(255,0,255,0.7)] ">
               {title}
             </h3>
 
             <p className="text-white ">{overview}</p>
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
         <div className="mt-4">
           <h3>{title}</h3>
         </div>
