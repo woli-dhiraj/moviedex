@@ -161,3 +161,8 @@
     display: none;
   }
 }
+
+@utility fancy-btn{
+  @apply bg-white/25 border border-white/20 backdrop-blur-2xl px-5 rounded-lg py-1
+                text-white hover:scale-105 hover:shadow-[1px_1px_2px_white] duration-200 font-semibold cursor-pointer
+}

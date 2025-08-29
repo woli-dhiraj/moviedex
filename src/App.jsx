@@ -32,7 +32,9 @@ function App() {
     setErrorMessage("");
     try {
       let endPoint = query
-        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(
+            query
+          )}&page=${page}`
         : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc&page=${page}`;
       let response = await fetch(endPoint, API_OPTIONS);
       if (!response.ok) {
@@ -68,11 +70,18 @@ function App() {
   };
 
   useEffect(() => {
+    if (debounceSearchTerm == "") {
+      setPage(1);
+    }
+  }, [debounceSearchTerm]);
+  useEffect(() => {
     fetchMovies(debounceSearchTerm);
+  }, [debounceSearchTerm, page]);
+  useEffect(() => {
     if (popularRef.current) {
       popularRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [debounceSearchTerm, page]);
+  }, [page]);
 
   useEffect(() => {
     fetchTrendingMovies();
@@ -83,15 +92,16 @@ function App() {
       <main>
         <div className="pattern" />
         <div className="wrapper">
-          {!searchTerm && (
-            <header>
-              <img src="hero.png" className="max-w-xl" alt="" />
+          <header>
+            <img src="hero.png" className="max-w-xl" alt="" />
+            {!searchTerm && (
               <h1>
                 Find <span className="text-gradient">Movies</span> you'll Love
                 Without the Hassle
               </h1>
-            </header>
-          )}
+            )}
+          </header>
+
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
           {trendingMovies.length > 0 && searchTerm === "" && (
@@ -136,24 +146,33 @@ function App() {
             {page == 1 ? (
               <button
                 onClick={() => setPage((prev) => prev + 1)}
-                className="text-white hover:text-gray-400 duration-200 font-semibold cursor-pointer"
+                className="fancy-btn
+                 "
               >
                 NEXT
               </button>
             ) : (
               <>
-                <button
-                  onClick={() => setPage((prev) => prev - 1)}
-                  className="text-white hover:text-gray-400 duration-200 font-semibold cursor-pointer"
-                >
-                  BACK
-                </button>
-                <button
-                  onClick={() => setPage((prev) => prev + 1)}
-                  className="text-white hover:text-gray-400 duration-200 font-semibold cursor-pointer"
-                >
-                  NEXT
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPage((prev) => prev - 1)}
+                    className="
+                     
+                    fancy-btn"
+                  >
+                    BACK
+                  </button>
+                  {page != totalPage && (
+                    <button
+                      onClick={() => setPage((prev) => prev + 1)}
+                      className="
+                     
+                      fancy-btn"
+                    >
+                      NEXT
+                    </button>
+                  )}
+                </div>
               </>
             )}
           </div>
